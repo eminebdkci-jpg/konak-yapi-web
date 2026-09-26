@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Konak Yapı</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            overflow-x: hidden;
+            overflow-y: auto;
+            color: #171717;
+        }
+
+        html { scroll-behavior: smooth; }
+
+
+        /* =========================
+           AÇILIŞ LOGOSU
+        ========================= */
+
+        #splash {
+            position: fixed;
+            inset: 0;
+
+            width: 100vw;
+            height: 100vh;
+
+            background: #000;
+
+            z-index: 9999;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            opacity: 1;
+
+            transition: opacity 0.8s ease;
+        }
+
+        #splash img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+        }
+
+        #splash.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+
+        /* =========================
+           ANA SAYFA
+        ========================= */
+
+        .hero {
+            position: relative;
+
+            width: 100vw;
+            height: 100vh;
+
+            overflow: hidden;
+
+            background: #000;
+        }
+
+
+        /* =========================
+           ANA SAYFA VİDEOSU
+        ========================= */
+
+        #heroVideo {
+            position: absolute;
+
+            top: 50%;
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            background: #000;
+
+            z-index: 1;
+        }
+
+
+        /* =========================
+           VİDEO KARARTMA
+        ========================= */
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.02),
+                rgba(0, 0, 0, 0.30)
+            );
+
+            z-index: 2;
+
+            pointer-events: none;
+        }
+
+
+        /* =========================
+           VİDEO ÜSTÜ KÜÇÜK LOGO
+        ========================= */
+
+        .header-logo {
+            position: absolute;
+            top: 28px;
+            left: 32px;
+            width: clamp(150px, 16vw, 250px);
+            height: auto;
+            z-index: 4;
+            display: block;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+
+        /* =========================
+           BUTONLAR
+        ========================= */
+
+        .buttons {
+            position: absolute;
+
+            left: 50%;
+            bottom: 55px;
+
+            transform: translateX(-50%);
+
+            display: flex;
+
+            gap: 18px;
+
+            z-index: 3;
+        }
+
+        .main-button {
+            min-width: 210px;
+
+            padding: 16px 30px;
+
+            border: 1px solid rgba(255,255,255,0.85);
+
+            background: rgba(0,0,0,0.30);
+
+            color: white;
+
+            font-size: 12px;
+
+            letter-spacing: 2px;
+
+            cursor: pointer;
+
+            backdrop-filter: blur(5px);
+
+            transition: 0.3s ease;
+        }
+
+        .main-button:hover {
+            background: white;
+            color: black;
+        }
+
+
+        /* =========================
+           360° TUR
+        ========================= */
+
+        #tour {
+            position: fixed;
+            inset: 0;
+
+            width: 100vw;
+            height: 100vh;
+
+            background: black;
+
+            z-index: 10000;
+
+            display: none;
+        }
+
+        #tour.active {
+            display: block;
+        }
+
+        #tour iframe {
+            width: 100%;
+            height: 100%;
+
+            border: none;
+        }
+
+
+        #closeTour {
+            position: absolute;
+
+            top: 20px;
+            right: 20px;
+
+            width: 50px;
+            height: 50px;
+
+            border-radius: 50%;
+
+            border: 1px solid white;
+
+            background: rgba(0,0,0,0.65);
+
+            color: white;
+
+            font-size: 28px;
+
+            cursor: pointer;
+
+            z-index: 10001;
+        }
+
+
+        /* =========================
+           VİDEODAN SONRAKİ İÇERİK
+        ========================= */
+
+        .scroll-cue {
+            position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%);
+            z-index: 3; color: white; text-decoration: none; font-size: 22px; opacity: .8;
+            animation: floatDown 1.8s ease-in-out infinite;
+        }
+        @keyframes floatDown { 0%,100%{transform:translate(-50%,0)} 50%{transform:translate(-50%,7px)} }
+
+        .about { background:#f3f0ea; padding: 120px 7vw 110px; }
+        .about-inner { max-width: 1250px; margin: 0 auto; display:grid; grid-template-columns: .75fr 1.25fr; gap:8vw; align-items:start; }
+        .eyebrow { font-size:12px; letter-spacing:4px; color:#8a6a3b; margin-bottom:20px; }
+        .about h2 { margin:0; }
+        .about-brand-logo { display:block; width:min(390px, 100%); height:auto; object-fit:contain; object-position:left center; margin-top:20px; }
+        .about-brand-name { margin-top:10px; font-family:Georgia, 'Times New Roman', serif; font-size:clamp(34px,4vw,56px); font-weight:400; letter-spacing:-1px; line-height:.88; color:#2f2924; display:inline-block; }
+        .about-copy { padding-top:28px; }
+        .about-copy h3 { font-family: Georgia, 'Times New Roman', serif; font-weight:400; font-size:clamp(28px,3vw,46px); line-height:1.15; margin-bottom:28px; }
+        .about-copy p { font-size:17px; line-height:1.9; color:#555; max-width:700px; }
+        .gold-line { width:70px; height:1px; background:#a8844f; margin:36px 0 0; }
+
+        .values { background:linear-gradient(135deg,#2b211c 0%,#3b2a20 52%,#241a16 100%); color:#fff; padding:105px 7vw 120px; }
+        .values-inner { max-width:1250px; margin:0 auto; }
+        .values-head { display:flex; justify-content:space-between; align-items:end; gap:30px; margin-bottom:60px; }
+        .values-head h2 { font-family:Georgia,'Times New Roman',serif; font-weight:400; font-size:clamp(36px,5vw,68px); }
+        .values-head p { color:#aaa; max-width:440px; line-height:1.7; }
+        .value-grid { display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid #383838; border-bottom:1px solid #383838; }
+        .value { position:relative; min-height:330px; padding:38px 34px 42px; border-right:1px solid #383838; transition:.35s ease; overflow:hidden; }
+        .value:last-child { border-right:none; }
+        .value:hover { background:rgba(255,255,255,0.045); transform:translateY(-6px); }
+        .value-num { font-family:Georgia,'Times New Roman',serif; font-size:72px; color:#282828; position:absolute; right:22px; top:18px; }
+        .value h3 { position:relative; margin-top:130px; font-size:19px; letter-spacing:2px; font-weight:500; }
+        .value p { position:relative; color:#aaa; line-height:1.75; margin-top:18px; max-width:300px; }
+        .value::after { content:''; position:absolute; left:34px; bottom:0; width:0; height:2px; background:#a8844f; transition:.35s ease; }
+        .value:hover::after { width:70px; }
+
+        .next-section { background:#f3f0ea; padding:90px 7vw; text-align:center; }
+        .next-section span { letter-spacing:4px; font-size:11px; color:#8a6a3b; }
+        .next-section h2 { font-family:Georgia,'Times New Roman',serif; font-weight:400; font-size:clamp(36px,5vw,64px); margin-top:16px; }
+
+        /* =========================
+           TELEFON
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .header-logo {
+                top: 18px;
+                left: 18px;
+                width: min(48vw, 190px);
+            }
+
+            .buttons {
+                width: 85%;
+
+                flex-direction: column;
+
+                bottom: 30px;
+            }
+
+            .main-button { width: 100%; min-width: 0; }
+            .scroll-cue { display:none; }
+            .about { padding:80px 24px 75px; }
+            .about-inner { grid-template-columns:1fr; gap:45px; }
+            .about h2 { letter-spacing:-2px; }
+            .about-copy { padding-top:0; }
+            .about-copy p { font-size:15px; line-height:1.8; }
+            .values { padding:75px 24px 85px; }
+            .values-head { display:block; margin-bottom:40px; }
+            .values-head p { margin-top:18px; }
+            .value-grid { grid-template-columns:1fr; }
+            .value { min-height:245px; border-right:none; border-bottom:1px solid #383838; padding:28px 8px 32px; }
+            .value:last-child { border-bottom:none; }
+            .value-num { right:8px; font-size:58px; }
+            .value h3 { margin-top:95px; }
+
+        }
+
+
+        /* KONAK PRIME PROJECT */
+        .project-section { background:#f3f0ea; padding:110px 7vw 120px; color:#1e1b18; }
+        .project-kicker { letter-spacing:4px; font-size:11px; color:#8a6a3b; text-transform:uppercase; margin-bottom:22px; }
+        .project-title { font-family:Georgia,'Times New Roman',serif; font-weight:400; font-size:clamp(48px,7vw,92px); line-height:.95; margin:0 0 54px; }
+        .project-layout { display:grid; grid-template-columns:minmax(0,1.45fr) minmax(320px,.75fr); gap:clamp(40px,6vw,90px); align-items:center; }
+        .project-image-wrap { overflow:hidden; min-height:520px; box-shadow:0 24px 60px rgba(42,29,19,.13); }
+        .project-image-wrap img { width:100%; height:100%; min-height:520px; object-fit:cover; display:block; transition:transform .8s ease; }
+        .project-image-wrap:hover img { transform:scale(1.018); }
+        .project-copy .location { color:#8a6a3b; letter-spacing:3px; font-size:11px; font-weight:700; margin-bottom:18px; }
+        .project-copy h3 { font-family:Georgia,'Times New Roman',serif; font-size:clamp(32px,3.5vw,52px); font-weight:400; line-height:1.08; margin:0 0 24px; }
+        .project-copy > p { font-size:15px; line-height:1.9; color:#5d554d; margin:0 0 34px; }
+        .project-facts { border-top:1px solid rgba(85,61,40,.18); margin-top:10px; }
+        .project-fact { display:flex; justify-content:space-between; gap:25px; padding:16px 0; border-bottom:1px solid rgba(85,61,40,.18); font-size:13px; }
+        .project-fact span:first-child { color:#8a8178; }
+        .project-fact strong { font-weight:600; text-align:right; }
+        .project-note { margin-top:18px !important; font-size:11px !important; line-height:1.6 !important; color:#9a9188 !important; }
+        @media (max-width: 850px) {
+            .project-section { padding:78px 6vw 88px; }
+            .project-title { margin-bottom:34px; }
+            .project-layout { grid-template-columns:1fr; gap:34px; }
+            .project-image-wrap, .project-image-wrap img { min-height:340px; }
+        }
+
+
+        /* KONAK PRIME INTERIOR GALLERY */
+        .interior-gallery { margin-top:90px; padding-top:48px; border-top:1px solid rgba(85,61,40,.16); }
+        .interior-gallery-head { display:flex; align-items:flex-end; justify-content:space-between; gap:30px; margin-bottom:30px; }
+        .interior-gallery-kicker { color:#8a6a3b; letter-spacing:3px; font-size:10px; font-weight:700; text-transform:uppercase; margin-bottom:12px; }
+        .interior-gallery h3 { font-family:Georgia,'Times New Roman',serif; font-size:clamp(30px,3vw,46px); font-weight:400; margin:0; }
+        .interior-gallery-head p { max-width:430px; margin:0; color:#766e66; font-size:13px; line-height:1.7; }
+        .interior-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+        .interior-card { height:260px; overflow:hidden; background:#ded9d2; cursor:zoom-in; border:0; padding:0; }
+        .interior-card img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .55s ease, filter .55s ease; }
+        .interior-card:hover img { transform:scale(1.035); filter:brightness(.94); }
+        .lightbox { position:fixed; inset:0; z-index:10000; background:rgba(16,13,11,.94); display:none; align-items:center; justify-content:center; padding:5vw; }
+        .lightbox.active { display:flex; }
+        .lightbox img { max-width:90vw; max-height:86vh; object-fit:contain; box-shadow:0 24px 70px rgba(0,0,0,.35); }
+        .lightbox-close { position:absolute; top:24px; right:30px; border:0; background:transparent; color:white; font-size:34px; font-weight:200; cursor:pointer; }
+        @media (min-width: 1450px) { .interior-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } .interior-card { height:245px; } }
+        @media (max-width: 850px) { .interior-gallery { margin-top:60px; padding-top:38px; } .interior-gallery-head { display:block; } .interior-gallery-head p { margin-top:14px; } .interior-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; } .interior-card { height:210px; } }
+        @media (max-width: 520px) { .interior-card { height:180px; } }
+
+    
+
+       
+
+    </style>
+
+</head>
+
+
+<body>
+    <!-- =========================
+         ANA SAYFA
+    ========================= -->
+
+    <section class="hero">
+
+        <img
+            class="header-logo"
+            src="./konak-header-logo.png"
+            alt="Konak Yapı">
+
+
+        <!-- =========================
+             VİDEO
+             ÖNCE WEBM DENENECEK
+        ========================= -->
+
+        <video
+            id="heroVideo"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto">
+
+            <source
+                src="./hero.webm"
+                type="video/webm">
+
+            <source
+                src="./hero.mp4"
+                type="video/mp4">
+
+        </video>
+
+
+
+        <!-- KARARTMA -->
+
+        <div class="overlay"></div>
+
+
+
+        <!-- BUTONLAR -->
+
+        <div class="buttons">
+
+
+            <button
+                class="main-button"
+                onclick="openCatalog()">
+
+                KATALOĞU İNCELE
+
+            </button>
+
+
+            <button
+                class="main-button"
+                onclick="openTour()">
+
+                360° SANAL TUR
+
+            </button>
+
+
+        </div>
+
+        <a class="scroll-cue" href="#about" aria-label="Aşağı kaydır">⌄</a>
+
+    </section>
+
+    <section class="about" id="about">
+        <div class="about-inner">
+            <div>
+                <div class="eyebrow">BİZ KİMİZ?</div>
+                <div class="about-brand-name">Konak<br>Yapı</div>
+            </div>
+            <div class="about-copy">
+                <h3>Yılların iç mekân deneyimi, çağdaş yaşamla buluşuyor.</h3>
+                <p>Konak Yapı, uzun yıllara dayanan mobilya ve iç mekân deneyimini çağdaş mimariyle buluşturarak yeni nesil yaşam alanları oluşturuyor. Yapının yalnızca dış kabuğuna değil, içerisinde yaşanan her detaya odaklanan yaklaşımıyla; mimariden malzeme seçimine, iç mekân tasarımından mobilyaya kadar bütüncül bir yaşam anlayışı sunuyor.</p>
+                <div class="gold-line"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="values">
+        <div class="values-inner">
+            <div class="values-head">
+                <h2>Yaşamı yeniden düşünmek.</h2>
+                <p>Estetik, konfor ve uzun vadeli değeri aynı projede buluşturan bir yaklaşım.</p>
+            </div>
+            <div class="value-grid">
+                <article class="value"><div class="value-num">01</div><h3>ÖZGÜN TASARIM</h3><p>Çağdaş mimariyi estetik ve işlevsellikle buluşturan, detayları özenle düşünülmüş yaşam alanları.</p></article>
+                <article class="value"><div class="value-num">02</div><h3>AYRICALIKLI YAŞAM</h3><p>Mobilya ve iç mekân deneyimini seçkin malzemeler ve nitelikli işçilikle buluşturan yüksek yaşam standardı.</p></article>
+                <article class="value"><div class="value-num">03</div><h3>AKILLI YATIRIM</h3><p>Bugünün yaşam beklentilerini ve uzun vadeli değeri birlikte gözeten, bulunduğu çevreye değer katmayı hedefleyen projeler.</p></article>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section" id="projelerimiz">
+        <div class="project-kicker">PROJELERİMİZ</div>
+        <h2 class="project-title">Konak Prime</h2>
+        <div class="project-layout">
+            <div class="project-image-wrap">
+                <img src="konak-prime-aerial.jpg" alt="Konak Prime dış cephe ve çevre renderı">
+            </div>
+            <div class="project-copy">
+                <div class="location">ANKARA · ÇUBUK</div>
+                <h3>Çağdaş yaşamın yeni yorumu.</h3>
+                <p>Konak Prime; çağdaş mimariyi, Konak Yapı'nın mobilya ve iç mekân deneyiminden gelen detay anlayışıyla buluşturan yeni nesil bir konut projesi. Nitelikli malzeme seçimleri, özenli iç mekân yaklaşımı ve konfor odaklı 3+1 daireleriyle Çubuk'ta seçkin bir yaşam alternatifi sunmayı hedefliyor.</p>
+                <div class="project-facts">
+                    <div class="project-fact"><span>Konum</span><strong>Çubuk, Ankara</strong></div>
+                    <div class="project-fact"><span>Daire Tipi</span><strong>3+1</strong></div>
+                    <div class="project-fact"><span>Proje Türü</span><strong>Konut</strong></div>
+                    <div class="project-fact"><span>Teslim</span><strong>Yakında açıklanacak</strong></div>
+                </div>
+                <p class="project-note">Bu bölüm taslak olarak hazırlanmıştır. Proje detayları kesinleştiğinde bilgiler güncellenecektir.</p>
+            </div>
+        </div>
+
+        <div class="interior-gallery">
+            <div class="interior-gallery-head">
+                <div><div class="interior-gallery-kicker">KONAK PRIME · İÇ MEKÂNLAR</div><h3>Detaylarda yaşam kalitesi.</h3></div>
+                <p>Konak Prime'ın iç mekân yaklaşımından seçili görseller.</p>
+            </div>
+            <div class="interior-grid">
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-01.jpg')"><img src="prime-interiors/interior-01.jpg" alt="Konak Prime Antre renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-02.jpg')"><img src="prime-interiors/interior-02.jpg" alt="Konak Prime Antre renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-03.jpg')"><img src="prime-interiors/interior-03.jpg" alt="Konak Prime Mutfak renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-04.jpg')"><img src="prime-interiors/interior-04.jpg" alt="Konak Prime Mutfak renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-05.jpg')"><img src="prime-interiors/interior-05.jpg" alt="Konak Prime Mutfak renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-06.jpg')"><img src="prime-interiors/interior-06.jpg" alt="Konak Prime Mutfak renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-07.jpg')"><img src="prime-interiors/interior-07.jpg" alt="Konak Prime Mutfak renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-08.jpg')"><img src="prime-interiors/interior-08.jpg" alt="Konak Prime Mutfak renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-09.jpg')"><img src="prime-interiors/interior-09.jpg" alt="Konak Prime Mutfak renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-10.jpg')"><img src="prime-interiors/interior-10.jpg" alt="Konak Prime Salon renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-11.jpg')"><img src="prime-interiors/interior-11.jpg" alt="Konak Prime Salon renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-12.jpg')"><img src="prime-interiors/interior-12.jpg" alt="Konak Prime Salon renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-13.jpg')"><img src="prime-interiors/interior-13.jpg" alt="Konak Prime Salon renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-14.jpg')"><img src="prime-interiors/interior-14.jpg" alt="Konak Prime Salon renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-15.jpg')"><img src="prime-interiors/interior-15.jpg" alt="Konak Prime Salon renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-16.jpg')"><img src="prime-interiors/interior-16.jpg" alt="Konak Prime Salon renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-17.jpg')"><img src="prime-interiors/interior-17.jpg" alt="Konak Prime Yatak odası renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-18.jpg')"><img src="prime-interiors/interior-18.jpg" alt="Konak Prime Yatak odası renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-19.jpg')"><img src="prime-interiors/interior-19.jpg" alt="Konak Prime Yatak odası renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-20.jpg')"><img src="prime-interiors/interior-20.jpg" alt="Konak Prime Yatak odası renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-24.jpg')"><img src="prime-interiors/interior-24.jpg" alt="Konak Prime Yatak odası ve giyinme renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-25.jpg')"><img src="prime-interiors/interior-25.jpg" alt="Konak Prime Giyinme odası renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-26.jpg')"><img src="prime-interiors/interior-26.jpg" alt="Konak Prime Giyinme odası renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-28.jpg')"><img src="prime-interiors/interior-28.jpg" alt="Konak Prime Banyo renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-29.jpg')"><img src="prime-interiors/interior-29.jpg" alt="Konak Prime Banyo renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-30.jpg')"><img src="prime-interiors/interior-30.jpg" alt="Konak Prime Banyo renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-31.jpg')"><img src="prime-interiors/interior-31.jpg" alt="Konak Prime Ebeveyn banyosu renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-32.jpg')"><img src="prime-interiors/interior-32.jpg" alt="Konak Prime Ebeveyn banyosu renderı" loading="lazy"></button>
+                <button class="interior-card" type="button" onclick="openImage('prime-interiors/interior-33.jpg')"><img src="prime-interiors/interior-33.jpg" alt="Konak Prime Ebeveyn banyosu renderı" loading="lazy"></button>
+            </div>
+        </div>
+    </section>
+
+    <div class="lightbox" id="imageLightbox" onclick="closeImage(event)"><button class="lightbox-close" type="button" onclick="closeImage(event)">×</button><img id="lightboxImage" src="" alt="Konak Prime iç mekân görseli"></div>
+
+
+
+    
+
+
+    <!-- =========================
+         360° SANAL TUR
+    ========================= -->
+
+    <div id="tour">
+
+
+        <button
+            id="closeTour"
+            onclick="closeTour()">
+
+            ×
+
+        </button>
+
+
+        <iframe
+            src="https://konakyapi.shipstatic.com"
+            allowfullscreen>
+        </iframe>
+
+
+    </div>
+
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+        const video =
+            document.getElementById("heroVideo");
+
+
+        video.muted = true;
+        video.volume = 0;
+
+
+        /* SAYFA AÇILDIĞINDA */
+
+        window.addEventListener("load", function () {
+
+
+            video.play()
+                .then(function () {
+
+                    console.log("WEB VIDEO ÇALIŞIYOR");
+
+                })
+                .catch(function (error) {
+
+                    console.error(
+                        "VIDEO HATASI:",
+                        error
+                    );
+
+                });
+
+        });
+
+
+
+        /* =========================
+           360° TURU AÇ
+        ========================= */
+
+        function openTour() {
+
+            document
+                .getElementById("tour")
+                .classList
+                .add("active");
+
+            video.pause();
+
+        }
+
+
+
+        /* =========================
+           360° TURU KAPAT
+        ========================= */
+
+        function closeTour() {
+
+            document
+                .getElementById("tour")
+                .classList
+                .remove("active");
+
+            video.play();
+
+        }
+
+
+
+        
+      function openCatalog() {
+    alert("Konak Prime kataloğu yakında yayında.");
+}
+
+        function openImage(src) {
+            const box = document.getElementById("imageLightbox");
+            document.getElementById("lightboxImage").src = src;
+            box.classList.add("active");
+            document.body.style.overflow = "hidden";
+        }
+        function closeImage(event) {
+            if (event && event.target && event.target.id === "lightboxImage") return;
+            document.getElementById("imageLightbox").classList.remove("active");
+            document.body.style.overflow = "";
+        }
+
+    </script>
+
+
+</body>
+
+</html>
